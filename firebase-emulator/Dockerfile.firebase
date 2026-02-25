@@ -16,13 +16,6 @@ WORKDIR /app
 
 COPY firebase.json .firebaserc ./
 
-# 4000: Emulator UI
-# 9099: Authentication
-# 8080: Firestore (optional, for future use)
 EXPOSE 4000 9099 8080
 
-# Create entrypoint script
-RUN echo '#!/bin/bash\nfirebase emulators:start --project=demo-kanban' > /entrypoint.sh && \
-    chmod +x /entrypoint.sh
-
-ENTRYPOINT ["/entrypoint.sh"]
+CMD ["firebase", "emulators:start", "--project=demo-kanban"]

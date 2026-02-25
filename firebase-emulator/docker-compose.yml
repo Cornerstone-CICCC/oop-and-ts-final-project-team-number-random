@@ -9,23 +9,6 @@ services:
       - "9099:9099" # Authentication Emulator
       - "8080:8080" # Firestore Emulator
     volumes:
-      # Persist emulator data between restarts
-      - ./firebase-data:/app/firebase-data
-      # Mount config files as read-only
       - ./firebase.json:/app/firebase.json:ro
       - ./.firebaserc:/app/.firebaserc:ro
-    environment:
-      - FIREBASE_PROJECT=demo-kanban
-      - GCLOUD_PROJECT=demo-kanban
-    networks:
-      - kanban-network
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:4000"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 30s
-
-networks:
-  kanban-network:
-    driver: bridge
+      - ./firestore.rules:/app/firestore.rules:ro
