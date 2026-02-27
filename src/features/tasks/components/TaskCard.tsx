@@ -1,14 +1,21 @@
+import type { DragEvent } from "react";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { IconButton } from "@mui/material";
 import type { Task } from "@/types";
 
 type TaskCardProps = {
   task: Task;
+  onDragStart: (taskId: string, event: DragEvent<HTMLDivElement>) => void;
 };
 
-export function TaskCard({ task }: TaskCardProps) {
+export function TaskCard(props: TaskCardProps) {
+  const { task, onDragStart } = props
   return (
-    <div className="rounded-2xl bg-white p-4 shadow-sm border border-slate-100">
+    <div
+      draggable
+      onDragStart={(event) => onDragStart(task.id, event)}
+      className="rounded-2xl bg-white p-4 shadow-sm border border-slate-100 cursor-grab active:cursor-grabbing"
+    >
       <div className="mb-3 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <span className={`h-2 w-2 rounded-full ${task.categoryColorClassName}`} aria-hidden="true" />

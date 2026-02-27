@@ -1,4 +1,5 @@
 import type { Task, TaskStatus } from "@/types";
+import { getDraggedTaskId, setDraggedTaskId } from "../utils";
 
 export class TaskList {
   tasks: Task[];
@@ -8,7 +9,7 @@ export class TaskList {
   }
 
   getAll(): Task[] {
-    return this.tasks;
+    return [...this.tasks];
   }
 
   getByStatus(status: TaskStatus): Task[] {
@@ -17,5 +18,32 @@ export class TaskList {
 
   add(newTask: Task): void {
     this.tasks.push(newTask);
+  }
+
+  updateTaskStatus(taskId: string, targetStatus: TaskStatus): boolean {
+    const targetTask = this.tasks.find((task) => task.id === taskId);
+    if (!targetTask) {
+      return false;
+    }
+
+    if (targetTask.status === targetStatus) {
+      return false;
+    }
+
+    targetTask.status = targetStatus;
+    return true;
+  }
+
+  onDrag(taskId: string, dataTransfer: DataTransfer | null): void {
+    setDraggedTaskId(dataTransfer, taskId);
+  }
+
+  onDrop(dataTransfer: DataTransfer | null, targetStatus: TaskStatus): boolean {
+    const taskId = getDraggedTaskId(dataTransfer);
+    if (!taskId) {
+      return false;
+    }
+
+    return this.updateTaskStatus(taskId, targetStatus);
   }
 }
